@@ -31,12 +31,17 @@ class TestSessionListener extends AbstractTestSessionListener
         parent::__construct($sessionOptions);
     }
 
+    /**
+     * @deprecated since Symfony 5.4, will be removed in 6.0.
+     */
     protected function getSession(): ?SessionInterface
     {
-        if (!$this->container->has('session')) {
-            return null;
+        trigger_deprecation('symfony/http-kernel', '5.4', '"%s" is deprecated and will be removed in 6.0, inject a session in the request instead.', __METHOD__);
+
+        if ($this->container->has('session')) {
+            return $this->container->get('session');
         }
 
-        return $this->container->get('session');
+        return null;
     }
 }
