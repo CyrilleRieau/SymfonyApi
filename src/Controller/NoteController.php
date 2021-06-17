@@ -33,24 +33,7 @@ class NoteController extends AbstractController
     {
         $note = new Note();
         // 2 méthodes disponibles : 
-        // -1 : à partir d'un formulaire
-        $form = $this->createForm(NoteType::class, $note);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($note);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('note_all');
-        }
-
-        return $this->render('note/add_note.html.twig', [
-            'note' => $note,
-            'form' => $form->createView(),
-        ]);
-        // -2 : à partir des données fournies par la requête
-        /*
+        // -1 : à partir des données fournies par la requête
         $entityManager = $this->getDoctrine()->getManager();
         $data = $this->getRequest()->request->all();
         $note = new Note();
@@ -73,7 +56,24 @@ class NoteController extends AbstractController
         $entityManager->flush();
 
         return new Response('Saved new note with id '.$note->getId());
-        */
+        // -2 : à partir d'un formulaire (en lien avec les templates présents dans le dossier du même nom)
+        // $form = $this->createForm(NoteType::class, $note);
+        // $form->handleRequest($request);
+
+        // if ($form->isSubmitted() && $form->isValid()) {
+        //     $entityManager = $this->getDoctrine()->getManager();
+        //     $entityManager->persist($note);
+        //     $entityManager->flush();
+
+        //     return $this->redirectToRoute('note_all');
+        // }
+
+        // return $this->render('note/add_note.html.twig', [
+        //     'note' => $note,
+        //     'form' => $form->createView(),
+        // ]);
+        
+        
     }
 
     /**
@@ -81,7 +81,7 @@ class NoteController extends AbstractController
      */
     public function getNote(Note $note): Response
     {
-        /* dans ce cas, au lieu de Note dans les paramètres on récupère id
+        // dans ce cas, au lieu de Note dans les paramètres on récupère id
         $note = $this->getDoctrine()
             ->getRepository(Note::class)
             ->find($id);
@@ -93,10 +93,10 @@ class NoteController extends AbstractController
         }
 
         return new Response('Note: '.$note);
-        */
-        return $this->render('note/get_note.html.twig', [
-            'note' => $note,
-        ]);
+        
+        // return $this->render('note/get_note.html.twig', [
+        //     'note' => $note,
+        // ]);
     }
 
     /**
@@ -104,22 +104,6 @@ class NoteController extends AbstractController
      */
     public function updateNote(Request $request, Note $note): Response
     {
-        $form = $this->createForm(NoteType::class, $note);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('note_crud_index');
-        }
-
-        return $this->render('note/update.html.twig', [
-            'note' => $note,
-            'form' => $form->createView(),
-        ]);
-
-        // autre possibilité
-        /*
         $entityManager = $this->getDoctrine()->getManager();
         $data = $this->getRequest()->request->all();
         $note = $this->getDoctrine()
@@ -134,7 +118,23 @@ class NoteController extends AbstractController
         $entityManager->persist($note);
 
         $entityManager->flush();
-        */
+
+        // autre possibilité
+         // $form = $this->createForm(NoteType::class, $note);
+        // $form->handleRequest($request);
+
+        // if ($form->isSubmitted() && $form->isValid()) {
+        //     $this->getDoctrine()->getManager()->flush();
+
+        //     return $this->redirectToRoute('note_crud_index');
+        // }
+
+        // return $this->render('note/update.html.twig', [
+        //     'note' => $note,
+        //     'form' => $form->createView(),
+        // ]);
+
+        
     }
 
     /**
@@ -142,16 +142,7 @@ class NoteController extends AbstractController
      */
     public function delete(Request $request, Note $note): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$note->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($note);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('note_crud_index');
-
-        // autre possibilité
-        /* $note = $this->getDoctrine()
+        $note = $this->getDoctrine()
         ->getRepository(Note::class)
         ->find($id);
 
@@ -163,8 +154,17 @@ class NoteController extends AbstractController
 
         $entityManager->remove($note);
         $entityManager->flush();
-        return new Response('Note deleted);
-        */
+        return new Response('Note deleted');
+
+        // autre possibilité
+        // if ($this->isCsrfTokenValid('delete'.$note->getId(), $request->request->get('_token'))) {
+        //     $entityManager = $this->getDoctrine()->getManager();
+        //     $entityManager->remove($note);
+        //     $entityManager->flush();
+        // }
+
+        // return $this->redirectToRoute('note_all');
+        
     }
 
     /**

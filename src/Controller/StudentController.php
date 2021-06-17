@@ -32,25 +32,8 @@ class StudentController extends AbstractController
     {
         $student = new Student();
         // 2 méthodes disponibles : 
-        // -1 : à partir d'un formulaire
-        $form = $this->createForm(StudentType::class, $student);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($student);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('student_index');
-        }
-
-        return $this->render('student/new.html.twig', [
-            'student' => $student,
-            'form' => $form->createView(),
-        ]);
-
-        // -2 : à partir des données fournies par la requête
-        /*
+        // -1 : à partir des données fournies par la requête
+        
         $entityManager = $this->getDoctrine()->getManager();
         $data = $this->getRequest()->request->all();
         $student = new Student();
@@ -64,7 +47,25 @@ class StudentController extends AbstractController
         $entityManager->flush();
 
         return new Response('Saved new student with id '.$student->getId());
-        */
+        
+        // -2 : à partir d'un formulaire (en lien avec les templates présents dans le dossier du même nom)
+        // $form = $this->createForm(StudentType::class, $student);
+        // $form->handleRequest($request);
+
+        // if ($form->isSubmitted() && $form->isValid()) {
+        //     $entityManager = $this->getDoctrine()->getManager();
+        //     $entityManager->persist($student);
+        //     $entityManager->flush();
+
+        //     return $this->redirectToRoute('student_index');
+        // }
+
+        // return $this->render('student/new.html.twig', [
+        //     'student' => $student,
+        //     'form' => $form->createView(),
+        // ]);
+
+        
     }
 
     /**
@@ -72,11 +73,7 @@ class StudentController extends AbstractController
      */
     public function show(Student $student): Response
     {
-        return $this->render('student/show.html.twig', [
-            'student' => $student,
-        ]);
 
-        /*
         $student = $this->getDoctrine()
             ->getRepository(Student::class)
             ->find($id);
@@ -88,7 +85,10 @@ class StudentController extends AbstractController
         }
 
         return new Response('Student: '.$student);
-        */
+
+        // return $this->render('student/show.html.twig', [
+        //     'student' => $student,
+        // ]);
 
     }
 
@@ -97,22 +97,7 @@ class StudentController extends AbstractController
      */
     public function updateStudent(Request $request, Student $student): Response
     {
-        $form = $this->createForm(StudentType::class, $student);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('student_index');
-        }
-
-        return $this->render('student/edit.html.twig', [
-            'student' => $student,
-            'form' => $form->createView(),
-        ]);
-
-        // autre possibilité
-        /*
+        
         $entityManager = $this->getDoctrine()->getManager();
         $data = $this->getRequest()->request->all();
         $student = $this->getDoctrine()
@@ -126,8 +111,21 @@ class StudentController extends AbstractController
         $entityManager->persist($student);
 
         $entityManager->flush();
-        */
+        
+        // autre possibilité
+        // $form = $this->createForm(StudentType::class, $student);
+        // $form->handleRequest($request);
 
+        // if ($form->isSubmitted() && $form->isValid()) {
+        //     $this->getDoctrine()->getManager()->flush();
+
+        //     return $this->redirectToRoute('student_index');
+        // }
+
+        // return $this->render('student/edit.html.twig', [
+        //     'student' => $student,
+        //     'form' => $form->createView(),
+        // ]);
     }
 
     /**
@@ -135,16 +133,7 @@ class StudentController extends AbstractController
      */
     public function delete(Request $request, Student $student): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$student->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($student);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('student_index');
-
-        // autre possibilité
-        /* $student = $this->getDoctrine()
+        $student = $this->getDoctrine()
         ->getRepository(Student::class)
         ->find($id);
 
@@ -156,8 +145,17 @@ class StudentController extends AbstractController
 
         $entityManager->remove($student);
         $entityManager->flush();
-        return new Response('Student deleted);
-        */
+        return new Response('Student deleted');
+        
+        // autre possibilité
+
+        // if ($this->isCsrfTokenValid('delete'.$student->getId(), $request->request->get('_token'))) {
+        //     $entityManager = $this->getDoctrine()->getManager();
+        //     $entityManager->remove($student);
+        //     $entityManager->flush();
+        // }
+
+        // return $this->redirectToRoute('student_index');
 
     }
 }

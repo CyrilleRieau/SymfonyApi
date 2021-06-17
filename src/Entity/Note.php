@@ -3,14 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\NoteRepository;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass=NoteRepository::class)
  */
 class Note
